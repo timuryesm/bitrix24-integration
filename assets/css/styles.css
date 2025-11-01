@@ -1,0 +1,35 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 1em;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+label {
+    margin-top: 1em;
+    display: block;
+}
+
+input, select, textarea, button {
+    width: 100%;
+    padding: 8px;
+    margin-top: 0.5em;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+button {
+    background: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background: #45a049;
+}
