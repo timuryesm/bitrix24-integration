@@ -1,78 +1,84 @@
-# Project Roof - Интеграция с Битрикс24
-Этот файл `README.md` включает ключевую информацию, структуру проекта и инструкции по настройке и использованию.
-## Описание проекта
+# Project Roof - Bitrix24 Integration
+This `README.md` file provides key information, project structure, and setup instructions.
 
-Этот проект представляет собой интеграцию с CRM-системой Битрикс24. Основная цель — автоматическое создание сделок на основе данных, поступающих из формы обратной связи, и привязка их к существующим или новым контактам в Битрикс24.
+## Project Description
 
-Форма обратной связи принимает данные от пользователя, включая имя, email, телефон, тему обращения, приоритет и сообщение. Эти данные отправляются на сервер, где:
-1. Ищется контакт в Битрикс24 по email или номеру телефона.
-2. Если контакт не найден, создается новый.
-3. На основе контакта создается сделка.
-4. Устанавливается приоритет сделки.
+This project is an integration with the Bitrix24 CRM system. Its main purpose is to automatically create deals based on data submitted through a contact form and link them to existing or new contacts in Bitrix24.
 
-## Структура проекта
+The contact form collects user information including name, email, phone number, inquiry subject, priority, and message. After submission:
+	1.	The system searches for an existing contact in Bitrix24 by email or phone number.
+	2.	If the contact is not found, a new one is created.
+	3.	A deal is created and associated with the contact.
+	4.	The priority field is set for the deal.
+	
+## Project Structure
 
-Проект состоит из нескольких основных директорий и файлов:
 project-roof
 ├── assets
-│   ├── css             # Стили для оформления веб-страницы
-│   └── js              # Скрипты для работы с клиентской частью
+│   ├── css                # Web page styling files
+│   └── js                 # Client-side scripts
 ├── config
-│   └── api_config.php  # Конфигурационный файл с вебхуком для API Bitrix24
+│   └── api_config.php     # Webhook configuration for Bitrix24 API
 ├── lib
-│   ├── Bitrix24API.php       # Основной класс для отправки запросов к API Bitrix24
-│   ├── ContactService.php    # Класс для работы с контактами в Bitrix24
-│   ├── DealService.php       # Класс для работы со сделками в Bitrix24
-│   └── FormHandler.php       # Класс для обработки данных из формы
+│   ├── Bitrix24API.php        # Main class for Bitrix24 API requests
+│   ├── ContactService.php     # Handles finding/creating Bitrix24 contacts
+│   ├── DealService.php        # Handles creating/updating Bitrix24 deals
+│   └── FormHandler.php        # Processes form data and coordinates API calls
 ├── scripts
-│   └── handle_form.php       # Скрипт для обработки данных из формы и взаимодействия с API
-├── index.php                 # Главная страница с HTML-формой для ввода данных
-└── README.md                 # Документация проекта
+│   └── handle_form.php        # Receives form POST data and triggers logic
+├── index.php                  # Main HTML form page
+└── README.md                  # Project documentation
 
-## Установка и настройка
+## Installation & Configuration
 
-1. Склонируйте репозиторий проекта.
-2. Перейдите в папку `config` и откройте файл `api_config.php`. В этом файле необходимо указать URL вебхука для работы с API Bitrix24:
+1. Clone the project repository.
+2. Open config/api_config.php and define your Bitrix24 webhook URL:
    ```php
    define('BITRIX24_WEBHOOK_URL', 'https://b24-vsijry.bitrix24.kz/rest/1/iqtvi855jk8by88i/');
-3. Убедитесь, что у вас установлен PHP версии 8.0+ и веб-сервер для локального тестирования.
+3. Ensure you are running PHP 8.0+ and have a local web server installed.
+   
+## Usage
 
-## Использование
-
-1. Запустите локальный сервер (например, с помощью встроенного PHP-сервера):
+1. Start a local PHP server:
    ```php
     php -S localhost:8000
-2. Откройте в браузере http://localhost:8000/index.php, чтобы увидеть форму обратной связи.
-3.	Заполните форму и отправьте её. Форма отправляет данные в скрипт scripts/handle_form.php, который обрабатывает их, создаёт или находит контакт, создаёт сделку и устанавливает приоритет.
-4.	Результат выполнения будет выведен на экран (успешное создание сделки или сообщение об ошибке).
+2. Open http://localhost:8000/index.php, чтобы увидеть форму обратной связи.
+3. Fill out and submit the form.
+	The script scripts/handle_form.php will:
+	•	Process the data
+	•	Find or create a contact
+	•	Create a deal
+	•	Update its priority
 
-## Основные файлы и классы
+5. The result (“deal created” or error message) will be displayed on the screen.
+
+## Main Files & Classes
 
 ### lib/Bitrix24API.php
 
-Основной класс для отправки запросов к API Bitrix24. Этот класс инкапсулирует общую логику работы с API.
+Handles low-level communications with the Bitrix24 REST API.
 
 ### lib/ContactService.php
 
-Класс для поиска и создания контактов в Bitrix24. Сначала пытается найти контакт по телефону или email, и если контакт не найден, создаёт новый.
+Searches for contacts by phone/email or creates new ones.
 
 ### lib/DealService.php
 
-Класс для создания и обновления сделок. Создает сделку и обновляет поле приоритета с использованием метода crm.deal.update.
+Creates deals and updates priority fields via crm.deal.update.
 
 ### lib/FormHandler.php
 
-Класс для обработки данных из формы, поиска или создания контактов и сделок, а также обновления поля приоритета.
+Coordinates form processing, contact lookup/creation, and deal creation.
 
 ### scripts/handle_form.php
 
-Скрипт для получения данных из формы и вызова необходимых методов из FormHandler.
+Receives form submission and triggers FormHandler.
 
-## Отладка и тестирование
+## Debugging & Testing
 
-Для удобной отладки рекомендуется настроить Xdebug в PHP. Вывод информации об ошибках поможет при тестировании интеграции.
+For easier debugging, configure Xdebug. PHP error output will assist during API integration testing.
 
-## Требования
+## Requirements
 
 	•	PHP 8.0+
-	•	Битрикс24 (необходим вебхук с доступом к API)
+	•	Bitrix24 account with API webhook access
